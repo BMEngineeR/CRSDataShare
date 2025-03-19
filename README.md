@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the data available for the Chronic rhinosinusitis (CRS) project, including CRS project, including single-cell RNA sequencing (scRNA-seq) and Geographical Molecular Profiler (GeoMX) datasets. The purpose of this document is to provide a comprehensive understanding of the data formats, structures, and content to facilitate further analysis.
+This document describes the data available for the Chronic rhinosinusitis (CRS) project, including single-cell RNA sequencing (scRNA-seq) and Geographical Molecular Profiler (GeoMX) datasets. The purpose of this document is to provide a comprehensive understanding of the data formats, structures, and content to facilitate further analysis.
 
 ## Data Types
 
@@ -20,7 +20,7 @@ The CRS project contains three main types of data:
 - Access Method: `readRDS()` function in R
 
 ### Description
-This is a publicly available scRNA-seq dataset from a Nature Immunity 2022 publication related to Chronic rhinosinusitis. The dataset has been processed and stored as a Seurat object.
+This is a publicly available scRNA-seq dataset from a Nature Immunity 2022 publication related to Chronic rhinosinusitis (CRS). The dataset has been processed and stored as a Seurat object.
 
 ### Detailed Analysis
 - **Object class**: Seurat
@@ -248,62 +248,31 @@ prop.table(table(public_seurat$celltype, public_seurat$disease), margin = 2) * 1
 
 ```R
 # Differential expression between conditions for a specific cell type
-cd8_cells <- subset(public_seurat, celltype == "CD8 T cells")
-Idents(cd8_cells) <- cd8_cells$disease
-cd8_de_genes <- FindMarkers(cd8_cells, ident.1 = "CRSwNP", ident.2 = "Control", 
-                           min.pct = 0.25, logfc.threshold = 0.25)
-
-# Visualize top DE genes
-VlnPlot(cd8_cells, features = rownames(cd8_de_genes)[1:5], split.by = "disease", ncol = 3)
-
-# Pathway enrichment using clusterProfiler
-library(clusterProfiler)
-library(org.Hs.eg.db)
-gene_list <- rownames(cd8_de_genes[cd8_de_genes$p_val_adj < 0.05, ])
-gene_ids <- mapIds(org.Hs.eg.db, keys = gene_list, keytype = "SYMBOL", column = "ENTREZID")
-go_enrichment <- enrichGO(gene = gene_ids, OrgDb = org.Hs.eg.db, 
-                          ont = "BP", pAdjustMethod = "BH", 
-                          pvalueCutoff = 0.05, qvalueCutoff = 0.05)
+cell_type <- "Secretory cells"
+Idents(public_seurat) <- public_seurat$celltype
+markers <- FindMarkers(public_seurat, ident.1 = "CRSwNP", ident.2 = "Control", 
+                        subset.ident = cell_type, 
+                        min.pct = 0.25, logfc.threshold = 0.25)
+head(markers, n = 20)
 ```
 
-### 3. GeoMX Spatial Analysis
+### 3. GeoMX Data Analysis
 
 ```R
 # Load GeoMX data
-expr_data <- read.csv("CRS_Data/GeoMX_sequencing_data/countFile_normalized_and_batch_effect_corrected.csv")
+raw_counts <- read.csv("CRS_Data/GeoMX_sequencing_data/countFile_raw.csv")
+processed_counts <- read.csv("CRS_Data/GeoMX_sequencing_data/countFile_normalized_and_batch_effect_corrected.csv")
+feature_anno <- read.csv("CRS_Data/GeoMX_sequencing_data/featureAnnoFile.csv")
 sample_anno <- read.csv("CRS_Data/GeoMX_sequencing_data/sampleAnnoFile.csv")
 
-# Filter to focus on specific tissue types
-crswp_samples <- sample_anno[sample_anno$TissueType == "CRSwNP", ]
-crswp_expr <- expr_data[, colnames(expr_data) %in% rownames(crswp_samples)]
-
-# Compare expression between compartments
-epi_samples <- grep("EPI", colnames(crswp_expr), value = TRUE)
-imm_samples <- grep("IMM", colnames(crswp_expr), value = TRUE)
-mac_samples <- grep("MAC", colnames(crswp_expr), value = TRUE)
-
-# Calculate mean expression by compartment
-epi_mean <- rowMeans(crswp_expr[, epi_samples])
-imm_mean <- rowMeans(crswp_expr[, imm_samples])
-mac_mean <- rowMeans(crswp_expr[, mac_samples])
-
-# Find compartment-specific genes
-compartment_specific <- data.frame(
-  gene = rownames(crswp_expr),
-  EPI = epi_mean,
-  IMM = imm_mean,
-  MAC = mac_mean
-)
-
-# Visualization with heatmap
+# Heatmap of top variable genes
 library(pheatmap)
-top_genes <- names(sort(apply(crswp_expr, 1, var), decreasing = TRUE))[1:50]
-pheatmap(crswp_expr[top_genes, ], 
-         annotation_col = sample_anno[colnames(crswp_expr), c("SegmentLabel", "TissueType")],
-         scale = "row",
+top_var_genes <- names(sort(apply(processed_counts, 1, var), decreasing = TRUE))[1:100]
+pheatmap(processed_counts[top_var_genes, ], 
+         annotation_col = sample_anno[, c("TissueType", "NewType")],
+         show_rownames = FALSE, show_colnames = FALSE,
          clustering_distance_rows = "correlation",
-         clustering_distance_cols = "correlation",
-         main = "Top Variable Genes in CRSwNP Samples")
+         clustering_distance_cols = "correlation")
 ```
 
 ## Conclusion
