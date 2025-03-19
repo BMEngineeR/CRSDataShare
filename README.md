@@ -20,7 +20,7 @@ The CRS project contains three main types of data:
 - Access Method: `readRDS()` function in R
 
 ### Description
-This is a publicly available scRNA-seq dataset from a Nature Immunity 2022 publication related to Cytokine Release Syndrome. The dataset has been processed and stored as a Seurat object.
+This is a publicly available scRNA-seq dataset from a Nature Immunity 2022 publication related to CRS. The dataset has been processed and stored as a Seurat object.
 
 ### Detailed Analysis
 - **Object class**: Seurat
