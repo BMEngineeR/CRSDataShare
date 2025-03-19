@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the data available for the Cytokine Release Syndrome (CRS) project, including single-cell RNA sequencing (scRNA-seq) and Geographical Molecular Profiler (GeoMX) datasets. The purpose of this document is to provide a comprehensive understanding of the data formats, structures, and content to facilitate further analysis.
+This document describes the data available for the CRS project, including single-cell RNA sequencing (scRNA-seq) and Geographical Molecular Profiler (GeoMX) datasets. The purpose of this document is to provide a comprehensive understanding of the data formats, structures, and content to facilitate further analysis.
 
 ## Data Types
 
