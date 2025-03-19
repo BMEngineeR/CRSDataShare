@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the data available for the CRS project, including single-cell RNA sequencing (scRNA-seq) and Geographical Molecular Profiler (GeoMX) datasets. The purpose of this document is to provide a comprehensive understanding of the data formats, structures, and content to facilitate further analysis.
+This document describes the data available for the Chronic rhinosinusitis (CRS) project, including CRS project, including single-cell RNA sequencing (scRNA-seq) and Geographical Molecular Profiler (GeoMX) datasets. The purpose of this document is to provide a comprehensive understanding of the data formats, structures, and content to facilitate further analysis.
 
 ## Data Types
 
@@ -20,7 +20,7 @@ The CRS project contains three main types of data:
 - Access Method: `readRDS()` function in R
 
 ### Description
-This is a publicly available scRNA-seq dataset from a Nature Immunity 2022 publication related to Cytokine Release Syndrome. The dataset has been processed and stored as a Seurat object.
+This is a publicly available scRNA-seq dataset from a Nature Immunity 2022 publication related to Chronic rhinosinusitis. The dataset has been processed and stored as a Seurat object.
 
 ### Detailed Analysis
 - **Object class**: Seurat
@@ -308,4 +308,4 @@ pheatmap(crswp_expr[top_genes, ],
 
 ## Conclusion
 
-The CRS project data represents a comprehensive resource for studying Cytokine Release Syndrome through multiple modalities (scRNA-seq and spatial transcriptomics) and sources (public and in-house). The datasets are well-processed with detailed annotations, making them ready for advanced integrative analyses to understand the cellular and molecular basis of CRS pathology.
+The CRS project data represents a comprehensive resource for studying Chronic rhinosinusitis through multiple modalities (scRNA-seq and spatial transcriptomics) and sources (public and in-house). The datasets are well-processed with detailed annotations, making them ready for advanced integrative analyses to understand the cellular and molecular basis of CRS pathology.
